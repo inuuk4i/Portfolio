@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>出会いの広場 — Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scene.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>出会いの広場</h1>
+      <a href="#works">作品・技術</a>
+    </header>
+    <section id="scene" aria-label="出会いの広場" aria-describedby="controls" tabindex="0">
+      <div class="sun" aria-hidden="true"></div>
+      <div class="terrain" aria-hidden="true"></div>
+      <div class="plaza" aria-hidden="true"></div>
+      <div class="tree tree-left" aria-hidden="true"></div>
+      <div class="tree tree-right" aria-hidden="true"></div>
+      <div class="signal" aria-hidden="true"></div>
+      <button id="host" class="actor" type="button" aria-label="僕に近づく">
+        <span class="person" aria-hidden="true"><i class="head"></i><i class="body"></i><i class="arm"></i></span>
+        <span class="speech" aria-hidden="true">やあ！</span>
+      </button>
+      <div id="visitor" class="actor" aria-hidden="true"><span class="person"><i class="head"></i><i class="body"></i></span><span class="marker"></span></div>
+    </section>
+    <p id="controls">タップ・クリック・方向キーで移動</p>
+    <p id="announcement" class="sr-only" role="status"></p>
+    <section id="works">
+      <h2>作品・技術</h2>
+      <dl>
+        <dt>出会いの広場</dt><dd>試作 · HTML / CSS / JavaScript</dd>
+        <dt>Umoja</dt><dd>卒業制作の Web サービス · 制作中</dd>
+        <dt>Web ゲーム</dt><dd>制作中</dd>
+      </dl>
+    </section>
+  </main>
+</body>
+</html>
