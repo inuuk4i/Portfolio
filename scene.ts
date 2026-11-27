@@ -3,22 +3,28 @@ const GREETING_DISTANCE = 16;
 const MOVE_SPEED = 42;
 const host = { x: 62, y: 46 };
 const visitor = { x: 34, y: 78 };
-const scene = document.querySelector("#scene");
-const hostButton = document.querySelector("#host");
-const visitorElement = document.querySelector("#visitor");
-const announcement = document.querySelector("#announcement");
+function findElement(id: string): HTMLElement {
+  const element = document.getElementById(id);
+  if (!element) throw new Error("広場に必要な要素が見つかりません。 " + id);
+  return element;
+}
+
+const scene = findElement("scene");
+const hostButton = findElement("host");
+const visitorElement = findElement("visitor");
+const announcement = findElement("announcement");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const directions = {
-  ArrowUp: [0, -1],
-  ArrowDown: [0, 1],
-  ArrowLeft: [-1, 0],
-  ArrowRight: [1, 0],
-};
+const directions = new Map<string, [number, number]>([
+  ["ArrowUp", [0, -1]],
+  ["ArrowDown", [0, 1]],
+  ["ArrowLeft", [-1, 0]],
+  ["ArrowRight", [1, 0]],
+]);
 
 let destination = visitor;
 let greeting = false;
 let frame = 0;
-let previousTime;
+let previousTime: number | undefined;
 
 function render() {
   visitorElement.style.left = visitor.x + "%";
@@ -32,7 +38,7 @@ function render() {
   announcement.textContent = greeting ? "僕が手を振りました。やあ！" : "";
 }
 
-function walk(time) {
+function walk(time: number) {
   const seconds = previousTime === undefined ? 0 : Math.min((time - previousTime) / 1000, 0.05);
   const xDistance = destination.x - visitor.x;
   const yDistance = destination.y - visitor.y;
@@ -52,7 +58,7 @@ function walk(time) {
   render();
 }
 
-function moveTo(x, y) {
+function moveTo(x: number, y: number) {
   destination = {
     x: Math.min(92, Math.max(8, x)),
     y: Math.min(92, Math.max(36, y)),
@@ -69,7 +75,7 @@ function moveTo(x, y) {
 }
 
 scene.addEventListener("click", (event) => {
-  if (hostButton.contains(event.target)) return;
+  if (event.target instanceof Node && hostButton.contains(event.target)) return;
 
   const bounds = scene.getBoundingClientRect();
   moveTo((event.clientX - bounds.left) / bounds.width * 100,
@@ -79,7 +85,7 @@ scene.addEventListener("click", (event) => {
 hostButton.addEventListener("click", () => moveTo(host.x - 5, host.y + 6));
 
 scene.addEventListener("keydown", (event) => {
-  const direction = directions[event.key];
+  const direction = directions.get(event.key);
   if (!direction || event.altKey || event.ctrlKey || event.metaKey) return;
 
   event.preventDefault();
