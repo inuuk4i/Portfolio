@@ -1,7 +1,9 @@
 // この値を変えると、どのくらい近づいたときに手を振るかが変わる。
 const GREETING_DISTANCE = 16;
 const MOVE_SPEED = 42;
+const WORKBENCH_DISTANCE = 14;
 const host = { x: 62, y: 46 };
+const maker = { x: 25, y: 56 };
 const visitor = { x: 34, y: 78 };
 function findElement(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -12,6 +14,11 @@ function findElement(id: string): HTMLElement {
 const scene = findElement("scene");
 const hostButton = findElement("host");
 const visitorElement = findElement("visitor");
+const makerButton = findElement("maker");
+const buildNotes = findElement("build-notes");
+if (!(buildNotes instanceof HTMLDialogElement)) {
+  throw new Error("制作メモを表示するダイアログが見つかりません。");
+}
 const announcement = findElement("announcement");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const directions = new Map<string, [number, number]>([
@@ -23,6 +30,7 @@ const directions = new Map<string, [number, number]>([
 
 let destination = visitor;
 let greeting = false;
+let atWorkbench = false;
 let frame = 0;
 let previousTime: number | undefined;
 
@@ -30,12 +38,18 @@ function render() {
   visitorElement.style.left = visitor.x + "%";
   visitorElement.style.top = visitor.y + "%";
 
-  const near = Math.hypot(visitor.x - host.x, visitor.y - host.y) <= GREETING_DISTANCE;
-  if (near === greeting) return;
+  const nearHost = Math.hypot(visitor.x - host.x, visitor.y - host.y) <= GREETING_DISTANCE;
+  const nearMaker = Math.hypot(visitor.x - maker.x, visitor.y - maker.y) <= WORKBENCH_DISTANCE;
+  if (nearHost === greeting && nearMaker === atWorkbench) return;
 
-  greeting = near;
+  greeting = nearHost;
+  atWorkbench = nearMaker;
   scene.classList.toggle("greeting", greeting);
-  announcement.textContent = greeting ? "僕が手を振りました。やあ！" : "";
+  scene.classList.toggle("at-workbench", atWorkbench);
+  makerButton.setAttribute("aria-label", atWorkbench ? "制作メモを開く" : "制作中の僕に近づく");
+  announcement.textContent = atWorkbench
+    ? "作業台に着きました。制作中の僕を選ぶと制作メモが開きます。"
+    : greeting ? "僕が手を振りました。やあ！" : "";
 }
 
 function walk(time: number) {
@@ -75,7 +89,7 @@ function moveTo(x: number, y: number) {
 }
 
 scene.addEventListener("click", (event) => {
-  if (event.target instanceof Node && hostButton.contains(event.target)) return;
+  if (event.target instanceof Node && (hostButton.contains(event.target) || makerButton.contains(event.target))) return;
 
   const bounds = scene.getBoundingClientRect();
   moveTo((event.clientX - bounds.left) / bounds.width * 100,
@@ -83,6 +97,14 @@ scene.addEventListener("click", (event) => {
 });
 
 hostButton.addEventListener("click", () => moveTo(host.x - 5, host.y + 6));
+
+makerButton.addEventListener("click", () => {
+  if (atWorkbench) {
+    buildNotes.showModal();
+  } else {
+    moveTo(maker.x + 7, maker.y + 6);
+  }
+});
 
 scene.addEventListener("keydown", (event) => {
   const direction = directions.get(event.key);

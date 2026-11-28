@@ -24,10 +24,25 @@
         <span class="person" aria-hidden="true"><i class="head"></i><i class="body"></i><i class="arm"></i></span>
         <span class="speech" aria-hidden="true">やあ！</span>
       </button>
+      <div class="workbench">
+        <div class="desk" aria-hidden="true"></div>
+        <button id="maker" class="actor" type="button" aria-label="制作中の僕に近づく" aria-haspopup="dialog">
+          <span class="person" aria-hidden="true"><i class="head"></i><i class="body"></i></span>
+          <span class="speech" id="maker-speech" aria-hidden="true">ちょっと見てく？</span>
+        </button>
+        <span class="desk-label" aria-hidden="true">作業台</span>
+      </div>
       <div id="visitor" class="actor" aria-hidden="true"><span class="person"><i class="head"></i><i class="body"></i></span><span class="marker"></span></div>
     </section>
     <p id="controls">タップ・クリック・方向キーで移動</p>
     <p id="announcement" class="sr-only" role="status"></p>
+    <dialog id="build-notes" aria-labelledby="build-title">
+      <form method="dialog"><button type="submit" autofocus>閉じる</button></form>
+      <h2 id="build-title">手を振るまで</h2>
+      <p>歩いている人と「僕」の座標から距離を測る。近づいたら、CSSで手を振る。</p>
+      <p>手を振り始める距離は <code>GREETING_DISTANCE</code> で決まる。</p>
+      <a href="https://github.com/inuuk4i/Portfolio/blob/main/scene.ts">広場のコードを見る</a>
+    </dialog>
     <section id="works">
       <h2>作品・技術</h2>
       <dl>

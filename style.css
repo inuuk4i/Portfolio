@@ -98,7 +98,7 @@ a { color: #ffd091; }
 #visitor .head { background: #d3a581; }
 .marker { position: absolute; bottom: -.22rem; left: 50%; width: 2.4rem; height: .7rem; transform: translateX(-50%); border: 2px solid #b3f5df; border-radius: 50%; }
 .speech { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: .32rem .62rem; border-radius: .6rem; color: #271f29; background: #ffdfad; font-weight: 700; }
-.greeting .speech { display: block; }
+.greeting #host .speech { display: block; }
 
 #controls { margin: .8rem 0 0; color: #d5e0d9; text-align: center; font-size: .9rem; }
 #works { margin-block: 4rem; border-top: 1px solid #52615e; padding-top: 1rem; }
@@ -109,3 +109,40 @@ a { color: #ffd091; }
 @media (prefers-reduced-motion: reduce) {
   .greeting .arm { animation: none; }
 }
+
+.workbench {
+  position: absolute;
+  left: 25%;
+  top: 56%;
+}
+
+.desk {
+  position: absolute;
+  width: clamp(3.5rem, 9vw, 6.5rem);
+  height: 1.9rem;
+  transform: translate(-64%, -15%) skewY(-8deg);
+  border-radius: .4rem;
+  border: 1px solid #ffe0a780;
+  background: linear-gradient(145deg, #9b7958, #614a43);
+  box-shadow: 0 .45rem #372e35;
+  pointer-events: none;
+}
+
+#maker { padding: 0; border: 0; border-radius: .5rem; background: transparent; color: inherit; cursor: pointer; }
+#maker .body { background: #b6a9dd; box-shadow: inset -.35rem -.2rem #776798, 0 .34rem #332b44; }
+.desk-label { position: absolute; top: 1.9rem; left: 0; transform: translateX(-50%); white-space: nowrap; font-size: .875rem; color: #fff1dc; }
+.at-workbench #maker .speech { display: block; }
+.at-workbench .desk { box-shadow: 0 .45rem #372e35, 0 0 1.4rem #ffd09160; }
+
+#build-notes {
+  width: min(30rem, calc(100% - 2rem));
+  padding: 1.5rem;
+  color: inherit;
+  background: #1f2f36;
+  border: 1px solid #738882;
+  border-radius: 1rem;
+}
+#build-notes::backdrop { background: #101b22ba; }
+#build-notes form { display: flex; justify-content: flex-end; }
+#build-notes button { min-height: 2.75rem; padding: .25rem .75rem; font: inherit; color: inherit; background: #304851; border: 1px solid #738882; border-radius: .5rem; cursor: pointer; }
+#build-notes h2 { margin-top: 0; }
